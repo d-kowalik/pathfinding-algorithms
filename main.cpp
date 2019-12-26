@@ -16,15 +16,10 @@ struct Point {
   friend bool operator<(const Point &l, const Point &r) {
     if (l.distance < r.distance)
       return true;
-    if (l.distance == r.distance) {
+    if (l.distance == r.distance)
       if (l.x < r.x)
         return true;
-      if (l.x == r.x) {
-        if (l.y < r.y)
-          return true;
-      }
-    }
-    return false;
+    return l.y < r.y;
   }
 };
 
@@ -71,8 +66,6 @@ void dijkstra(int graph[SIZE][SIZE], Point src, Point dest) {
 
   while (!next_points.empty()) {
     Point current_point = *next_points.begin();
-    // printf("Checking (%d, %d, %d)\n", current_point.x, current_point.y,
-    //        current_point.distance);
     next_points.erase(next_points.begin());
     int x = current_point.x;
     int y = current_point.y;
@@ -84,17 +77,15 @@ void dijkstra(int graph[SIZE][SIZE], Point src, Point dest) {
     // Search right
     if (dijkstra_check(graph, x + 1, y, dist, dest))
       return;
+    // Search left
     if (dijkstra_check(graph, x - 1, y, dist, dest))
       return;
+    // Search down
     if (dijkstra_check(graph, x, y + 1, dist, dest))
       return;
+    // Search up
     if (dijkstra_check(graph, x, y - 1, dist, dest))
       return;
-
-    // printf("Currently checking:\n");
-    // for (const auto &point : next_points)
-    //   printf("(%d, %d, %d) ", point.x, point.y, point.distance);
-    // putchar('\n');
   }
 }
 
